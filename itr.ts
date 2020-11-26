@@ -225,11 +225,12 @@ namespace ITR
     let onReceivedDataHandler: (pm1: number, pm25: number, pm10: number) => void;
     // SG35 Variables end
 	
-	
-	basic.showIcon(IconNames.Chessboard)
-	
-	basic.pause(25 * 1000)
-	
+    // Delay for CW01 to wakeup
+
+    basic.showIcon(IconNames.Chessboard)
+    basic.pause(25 * 1000)
+
+    // Delay for CW01 to wakeup
 
     // SW01 function call start
 
@@ -241,7 +242,7 @@ namespace ITR
 
     // SN01 function call start
 
-        control.inBackground(function () {
+        startParallel(function () {
             while (true) {
                 parseNMEA()
                 basic.pause(10)
@@ -252,6 +253,8 @@ namespace ITR
     // SN01 function call end
 
     // SG35 function call start
+
+    begin()
     
     // SG35 function call end
 
@@ -267,7 +270,6 @@ namespace ITR
 
     serial.redirect(SerialPin.P1, SerialPin.P0, 115200)
     serial.setRxBufferSize(200)
-
     basic.pause(2000)
     serial.writeString("ATE0" + cw01_vars.NEWLINE)
     basic.pause(300)
@@ -1437,8 +1439,68 @@ namespace ITR
         }
     }
 	
-    /*function startParallel(u: () => void) {
-		control.inBackground(a);
-    }*/
+
+    //%shim=sg35::begin
+    function begin(): void {
+        return
+    }
+
+    //%shim=sg35::read
+    export function read(): boolean {
+        return true
+    }
+
+
+    //%shim=sg35::pm1
+    export function pm1(): number {
+        return 1
+    }
+
+
+    //%shim=sg35::pm25
+    export function pm25(): number {
+        return 1
+    }
+
+
+    //%shim=sg35::pm10
+    export function pm10(): number {
+        return 1
+    }
+
+    //%shim=sg35::onDataReceived
+    function onDataReceived(body: Action): void {
+        return;
+    }
+
+    function init() {
+
+        startParallel(function(){
+                while(true)
+                {
+                    let rcv = read()
+                    if(rcv)
+                    {
+                        onReceivedDataHandler(pm1(), pm25(), pm10())
+                    }
+                    basic.pause(100)
+                }
+        })
+    }
+
+    //% block="SG35 on received "
+    //% group="SG35"
+    //% draggableParameters=reporter
+    export function onReceivedData(cb: (receivedPM1: number,receivedPM25: number,receivedPM10: number) => void): void {
+        init()
+        onReceivedDataHandler = cb
+    }
+
+    //% shim=parall::startParallel
+    export function startParallel(u: () => void) {
+        return 1;
+    }
+
+    begin()
 
 }
