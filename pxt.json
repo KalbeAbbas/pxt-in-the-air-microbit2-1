@@ -8,7 +8,13 @@
     },
     "files": [
         "README.md",
-        "itr.ts"
+        "itr.ts",
+        "ix03.cpp",
+        "ix03.h",
+        "parallel.cpp",
+        "parallel.h",
+        "sg35.cpp",
+        "sg35.h"
     ],
     "testFiles": [
         "test.ts"
@@ -17,5 +23,27 @@
     "supportedTargets": [
         "microbit"
     ],
-    "preferredEditor": "tsprj"
+    "preferredEditor": "tsprj",
+    "yotta": {
+        "config": {
+            "microbit-dal": {
+                "bluetooth": {
+                    "private_addressing": 0,
+                    "advertising_timeout": 0,
+                    "tx_power": 0,
+                    "dfu_service": 0,
+                    "event_service": 0,
+                    "device_info_service": 0,
+                    "eddystone_url": 0,
+                    "eddystone_uid": 0,
+                    "open": 0,
+                    "pairing_mode": 0,
+                    "whitelist": 1,
+                    "security_level": "SECURITY_MODE_ENCRYPTION_NO_MITM",
+                    "partial_flashing": 1,
+                    "enabled": 0
+                }
+            }
+        }
+    }
 }
