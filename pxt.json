@@ -16,7 +16,6 @@
         "sg35.cpp",
         "sg35.h"
     ],
-    "testFiles": [],
     "public": true,
     "supportedTargets": [
         "microbit"
