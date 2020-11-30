@@ -1474,6 +1474,11 @@ namespace ITR
     export function read(): boolean {
         return true
     }
+	
+	//%shim=sg35::readUntil
+    export function readUntil(time: number): boolean {
+        return true
+    }
 
 
     //%shim=sg35::pm1
@@ -1497,35 +1502,32 @@ namespace ITR
     function onDataReceived(body: Action): void {
         return;
     }
-
-    function init() {
-
-        startParallel(function(){
-                while(true)
-                {
-                    let rcv = read()
-                    if(rcv)
-                    {
-                        onReceivedDataHandler(pm1(), pm25(), pm10())
-                    }
-                    basic.pause(100)
-                }
-        })
-    }
-
-    //% block="SG35 on received "
-    //% group="SG35"
-    //% draggableParameters=reporter
-    export function onReceivedData(cb: (receivedPM1: number,receivedPM25: number,receivedPM10: number) => void): void {
-        init()
-        onReceivedDataHandler = cb
-    }
+	
+	//%shim=sg35::turnOffSG35
+	export function turnOffSG35():void
+	{
+		return;
+	}
+	
+	//%shim=sg35::turnOnSG35
+	export function turnOnSG35():void
+	{
+		return;
+	}
+	
+	//%block="SG35 run until %time"
+	export function runUntil(time: number)
+	{
+		turnOnSG35();
+		
+		readUntil(time);
+		
+		turnOffSG35();
+	}
 
     //% shim=parall::startParallel
     export function startParallel(u: () => void) {
         return 1;
     }
-
-    begin()
 
 }
