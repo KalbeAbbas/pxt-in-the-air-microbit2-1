@@ -746,6 +746,31 @@ namespace ITR
 
     }
 
+    //%blockId="sleepCW01"
+    //%block="CW01 sleep" 
+    export function sleepCW01()
+    {
+        serial.writeString("AT+SLEEP=1" + cw01_vars.NEWLINE)
+        basic.pause(1000)
+        basic.showNumber(2)
+    }
+
+    //%blockId="wakeUpCW01"
+    //%block="CW01 wake up" 
+    export function wakeUpCW01()
+    {
+        let rcv: string =""
+
+        do
+        {
+            serial.writeString("AT+SLEEP=2" + cw01_vars.NEWLINE)
+            rcv = serial.readString()
+            basic.pause(500)
+        }while(!rcv.includes("OK"))
+
+        basic.showNumber(3)
+    }
+
     /**
     * Connect to W-Fi 
     */
